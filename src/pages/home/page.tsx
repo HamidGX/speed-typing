@@ -1,17 +1,30 @@
-import { faker } from '@faker-js/faker'
-
 import CountdownTimer from './_components/countdown-timer'
 import GeneratedWords from './_components/generated-words'
 import RestartButton from './_components/restart-button'
+import Results from './_components/results'
+import UserTyping from './_components/user-typing'
 
-const words = faker.lorem.words(10)
+import useEngine from '@/hooks/use-engine'
+import calculateAccuracyPercentage from '@/lib/calculate-accurancy-percentage'
 
 export default function HomePage() {
+	const { phase, words, timeLeft, typed, errors, restart, totalTyped } =
+		useEngine()
+
 	return (
-		<>
-			<CountdownTimer timeLeft={10} />
-			<GeneratedWords words={words} />
-			<RestartButton onClick={() => console.log('Restarting...')} />
-		</>
+		<div className='px-4'>
+			<CountdownTimer timeLeft={timeLeft} />
+			<div className='relative max-w-xl mt-3 text-4xl leading-relaxed break-all'>
+				<GeneratedWords key={words} words={words} />
+				<UserTyping words={words} userInput={typed} />
+			</div>
+			<RestartButton onClick={restart} />
+			<Results
+				phase={phase}
+				errors={errors}
+				accurancyPercentage={calculateAccuracyPercentage(errors, totalTyped)}
+				total={totalTyped}
+			/>
+		</div>
 	)
 }

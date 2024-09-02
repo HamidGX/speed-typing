@@ -1,3 +1,3 @@
 export default function GeneratedWords({ words }: { words: string }) {
-	return <p className='text-4xl text-center text-zinc-500'>{words}</p>
+	return <p className='text-zinc-500'>{words}</p>
 }
